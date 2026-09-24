@@ -53,6 +53,18 @@ Describe 'Get-Factorial' {
         ($result -is [System.Numerics.BigInteger]) | Should -BeTrue
         $result | Should -Be $Expected
     }
+
+    It 'supports the documented upper bound' {
+        $result = Get-Factorial -N 1000
+
+        @($result) | Should -HaveCount 1
+        ($result -is [System.Numerics.BigInteger]) | Should -BeTrue
+        $result | Should -BeGreaterThan 0
+    }
+
+    It 'rejects values above the documented upper bound' {
+        { Get-Factorial -N 1001 } | Should -Throw
+    }
 }
 
 Describe 'math-tool CLI' {

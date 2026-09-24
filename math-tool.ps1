@@ -35,10 +35,14 @@ function Get-Fibonacci {
 }
 
 function Get-Factorial {
+    <#
+    .PARAMETER N
+    A non-negative integer no greater than 1000.
+    #>
     [OutputType([System.Numerics.BigInteger])]
     param(
         [Parameter(Mandatory)]
-        [ValidateRange(0, 2147483647)]
+        [ValidateRange(0, 1000)]
         [int]$N
     )
 
