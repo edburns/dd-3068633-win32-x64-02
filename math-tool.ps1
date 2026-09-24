@@ -1,18 +1,18 @@
 [CmdletBinding()]
 param(
-    [ValidateRange(0, 2147483647)]
+    [ValidateRange(0, 46)]
     [int]$N = 0
 )
-
-Set-StrictMode -Version Latest
 
 function Get-Fibonacci {
     [OutputType([int])]
     param(
         [Parameter(Mandatory)]
-        [ValidateRange(0, 2147483647)]
+        [ValidateRange(0, 46)]
         [int]$N
     )
+
+    Set-StrictMode -Version Latest
 
     if ($N -lt 2) {
         return $N

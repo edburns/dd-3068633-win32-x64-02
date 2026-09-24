@@ -22,6 +22,7 @@ Describe 'Get-Fibonacci' {
         @{ N = 0; Expected = 0 }
         @{ N = 1; Expected = 1 }
         @{ N = 7; Expected = 13 }
+        @{ N = 46; Expected = 1836311903 }
     ) {
         param($N, $Expected)
 
@@ -31,6 +32,10 @@ Describe 'Get-Fibonacci' {
         ($result -is [int]) | Should -BeTrue
         $result | Should -Be $Expected
     }
+
+    It 'rejects values that exceed the Int32 Fibonacci range' {
+        { Get-Fibonacci -N 47 } | Should -Throw
+    }
 }
 
 Describe 'math-tool CLI' {
@@ -38,13 +43,20 @@ Describe 'math-tool CLI' {
         @{ N = 0; Expected = 0 }
         @{ N = 1; Expected = 1 }
         @{ N = 7; Expected = 13 }
+        @{ N = 46; Expected = 1836311903 }
     ) {
         param($N, $Expected)
 
-        $output = @(& $pwshPath -NoLogo -NoProfile -File $mathToolPath -N $N 2>&1)
+        $stdoutPath = Join-Path $TestDrive "stdout-$N.txt"
+        $stderrPath = Join-Path $TestDrive "stderr-$N.txt"
+        & $pwshPath -NoLogo -NoProfile -File $mathToolPath -N $N 1> $stdoutPath 2> $stderrPath
+        $exitCode = $LASTEXITCODE
+        $stdout = @(Get-Content -LiteralPath $stdoutPath)
+        $stderr = @(Get-Content -LiteralPath $stderrPath)
 
-        $LASTEXITCODE | Should -Be 0
-        $output | Should -HaveCount 1
-        $output[0] | Should -Be "Fibonacci($N) = $Expected"
+        $exitCode | Should -Be 0
+        $stdout | Should -HaveCount 1
+        $stdout[0] | Should -Be "Fibonacci($N) = $Expected"
+        $stderr | Should -HaveCount 0
     }
 }
