@@ -1,10 +1,12 @@
 [CmdletBinding()]
 param()
 
-$mathToolPath = Join-Path $PSScriptRoot 'math-tool.ps1'
-$pwshPath = (Get-Process -Id $PID).Path
+BeforeAll {
+    $script:mathToolPath = Join-Path $PSScriptRoot 'math-tool.ps1'
+    $script:pwshPath = (Get-Process -Id $PID).Path
 
-. $mathToolPath
+    . $mathToolPath
+}
 
 Describe 'math-tool dot sourcing' {
     It 'exposes Get-Fibonacci without CLI output' {
