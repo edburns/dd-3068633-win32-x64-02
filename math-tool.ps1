@@ -1,10 +1,12 @@
 [CmdletBinding()]
 param(
-    [ValidateSet('fibonacci', 'factorial')]
-    [string]$Operation = 'fibonacci',
-
+    [Parameter(Position = 0)]
     [ValidateRange(0, 2147483647)]
-    [int]$N = 0
+    [int]$N = 0,
+
+    [Parameter(Position = 1)]
+    [ValidateSet('fibonacci', 'factorial')]
+    [string]$Operation = 'fibonacci'
 )
 
 function Get-Fibonacci {

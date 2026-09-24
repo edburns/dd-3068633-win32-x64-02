@@ -88,6 +88,17 @@ Describe 'math-tool CLI' {
         [System.IO.File]::ReadAllText($stderrPath) | Should -Be ''
     }
 
+    It 'preserves the positional N-only Fibonacci invocation' {
+        $stdoutPath = Join-Path $TestDrive 'stdout-positional-fibonacci.txt'
+        $stderrPath = Join-Path $TestDrive 'stderr-positional-fibonacci.txt'
+        & $pwshPath -NoLogo -NoProfile -File $mathToolPath 7 1> $stdoutPath 2> $stderrPath
+        $exitCode = $LASTEXITCODE
+
+        $exitCode | Should -Be 0
+        [System.IO.File]::ReadAllText($stdoutPath) | Should -Be "Fibonacci(7) = 13$([Environment]::NewLine)"
+        [System.IO.File]::ReadAllText($stderrPath) | Should -Be ''
+    }
+
     It 'writes exactly one Factorial result line when explicitly selected' {
         $stdoutPath = Join-Path $TestDrive 'stdout-factorial.txt'
         $stderrPath = Join-Path $TestDrive 'stderr-factorial.txt'
